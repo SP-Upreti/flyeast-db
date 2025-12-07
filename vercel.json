@@ -2,26 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://flyeastapi.webxnepal.com/api/v1/:path*"
+      "destination": "/api/:path*"
     },
     {
       "source": "/(.*)",
       "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Origin",
-          "value": "https://flyeastadmin.webxnepal.com"
-        },
-        {
-          "key": "Referer",
-          "value": "https://flyeastadmin.webxnepal.com/"
-        }
-      ]
     }
   ]
 }
