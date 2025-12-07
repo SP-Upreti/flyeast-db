@@ -1,7 +1,13 @@
 import axios from "axios";
 
+// Use production API URL in production, proxy in development
+const isDevelopment = import.meta.env.DEV;
+const baseURL = isDevelopment 
+  ? '/api' 
+  : 'https://flyeastapi.webxnepal.com/api/v1';
+
 export const api = axios.create({
-  baseURL: `/api`,
+  baseURL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
