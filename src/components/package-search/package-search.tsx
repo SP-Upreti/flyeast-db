@@ -960,7 +960,7 @@ function EditPackagePage({
                     initialContent={field.value || ""}
                     onChange={(content) => field.onChange(content)}
                     placeholder="Write package overview..."
-                    className="h-64 pb-8"
+                    className=" pb-8"
                   />
                 </FormControl>
                 <FormMessage />

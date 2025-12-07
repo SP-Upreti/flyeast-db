@@ -262,7 +262,7 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-24">
           {/* Basic Information */}
-          <div className="bg-muted/70 p-4 rounded-[2px]">
+          <div className=" ">
             <h3 className="font-medium mb-4">Basic Information</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -310,6 +310,41 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
                   </FormItem>
                 )}
               />
+
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="season"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Season *</FormLabel>
+                      <div className="flex flex-wrap gap-3 mt-2">
+                        {["spring", "summer", "autumn", "winter"].map((season) => (
+                          <div key={season} className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={field.value?.includes(season)}
+                              onCheckedChange={(checked) => {
+                                const currentValue = field.value || [];
+                                if (checked) {
+                                  field.onChange([...currentValue, season]);
+                                } else {
+                                  field.onChange(
+                                    currentValue.filter((item: string) => item !== season)
+                                  );
+                                }
+                              }}
+                            />
+                            <label className="text-sm font-medium leading-none capitalize cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                              {season}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           </div>
 
@@ -333,7 +368,8 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
             )}
           />
 
-          <FormField
+          <div className="flex gap-6 items-center">
+            <FormField
             control={form.control}
             name="isPopular"
             render={({ field }) => (
@@ -370,6 +406,7 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
               </FormItem>
             )}
           />
+          </div>
 
           {/* Overview */}
           <FormField
@@ -383,7 +420,7 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
                     initialContent={field.value || ""}
                     onChange={(content) => field.onChange(content)}
                     placeholder="Write package overview..."
-                    className="h-64 pb-8"
+                    className=" pb-8"
                   />
                 </FormControl>
                 <FormMessage />
@@ -411,7 +448,7 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
           />
 
           {/* Additional Information */}
-          <div className="p-4 rounded-[2px]">
+          <div className="">
             <h3 className="font-medium mb-4">Additional Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
@@ -588,40 +625,7 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
               />
             </div>
 
-            <div className="mt-4">
-              <FormField
-                control={form.control}
-                name="season"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Season *</FormLabel>
-                    <div className="flex flex-wrap gap-3 mt-2">
-                      {["spring", "summer", "autumn", "winter"].map((season) => (
-                        <div key={season} className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={field.value?.includes(season)}
-                            onCheckedChange={(checked) => {
-                              const currentValue = field.value || [];
-                              if (checked) {
-                                field.onChange([...currentValue, season]);
-                              } else {
-                                field.onChange(
-                                  currentValue.filter((item: string) => item !== season)
-                                );
-                              }
-                            }}
-                          />
-                          <label className="text-sm font-medium leading-none capitalize cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            {season}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+
           </div>
           <div className="hidden">
           </div>
@@ -645,7 +649,7 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
           />
 
           {/* Form Actions - Sticky at bottom */}
-          <div className="sticky bottom-0 flex justify-end gap-4 pt-6 pb-6 mt-6 bg-background border-t">
+          <div className="sticky bottom-0 flex justify-end gap-4  pb-6  bg-background ">
             <Button
               type="button"
               variant="outline"

@@ -175,15 +175,7 @@ function PackageListView({
     }
   };
 
-  const handleBestSellingToggle = async (packageId: string, isBestSelling: boolean) => {
-    try {
-      await api.put(`/make-best-seller/${packageId}`, { flag: isBestSelling });
-      toast.success(`Package ${isBestSelling ? 'marked as' : 'removed from'} best selling`);
-      refetch();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update best selling status");
-    }
-  };
+
 
   const columns: ColumnDef<any>[] = [
     {
@@ -768,8 +760,8 @@ function EditPackagePage({
 
   // Form submission
   const onSubmit = async (values: any) => {
-    setIsCreating(true);
     try {
+      setIsCreating(true);
       const formData = new FormData();
 
       // Add all form values to FormData
@@ -914,7 +906,7 @@ function EditPackagePage({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-24">
           {/* Basic Information */}
-          <div className="bg-muted/70 p-4 rounded-[2px]">
+          <div className="">
             <h3 className="font-medium mb-4">Basic Information</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -962,6 +954,39 @@ function EditPackagePage({
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="season"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Season *</FormLabel>
+                    <div className="flex flex-wrap gap-3 mt-2">
+                      {["spring", "summer", "autumn", "winter"].map((season) => (
+                        <div key={season} className="flex items-center space-x-2">
+                          <Checkbox
+                            checked={field.value?.includes(season)}
+                            onCheckedChange={(checked) => {
+                              const currentValue = field.value || [];
+                              if (checked) {
+                                field.onChange([...currentValue, season]);
+                              } else {
+                                field.onChange(
+                                  currentValue.filter((item: string) => item !== season)
+                                );
+                              }
+                            }}
+                          />
+                          <label className="text-sm font-medium leading-none capitalize cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            {season}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
 
@@ -985,7 +1010,8 @@ function EditPackagePage({
             )}
           />
 
-          <FormField
+          <div className="flex gap-6 items-center">
+            <FormField
             control={form.control}
             name="isPopular"
             render={({ field }) => (
@@ -1022,6 +1048,7 @@ function EditPackagePage({
               </FormItem>
             )}
           />
+          </div>
 
           {/* Overview */}
           <FormField
@@ -1035,7 +1062,7 @@ function EditPackagePage({
                     initialContent={field.value || ""}
                     onChange={(content) => field.onChange(content)}
                     placeholder="Write package overview..."
-                    className="h-64 pb-8"
+                    className=" pb-8"
                   />
                 </FormControl>
                 <FormMessage />
@@ -1063,7 +1090,7 @@ function EditPackagePage({
           />
 
           {/* Additional Information */}
-          <div className="p-4 rounded-[2px]">
+          <div className="">
             <h3 className="font-medium mb-4">Additional Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
@@ -1240,40 +1267,7 @@ function EditPackagePage({
               />
             </div>
 
-            <div className="mt-4">
-              <FormField
-                control={form.control}
-                name="season"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Season *</FormLabel>
-                    <div className="flex flex-wrap gap-3 mt-2">
-                      {["spring", "summer", "autumn", "winter"].map((season) => (
-                        <div key={season} className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={field.value?.includes(season)}
-                            onCheckedChange={(checked) => {
-                              const currentValue = field.value || [];
-                              if (checked) {
-                                field.onChange([...currentValue, season]);
-                              } else {
-                                field.onChange(
-                                  currentValue.filter((item: string) => item !== season)
-                                );
-                              }
-                            }}
-                          />
-                          <label className="text-sm font-medium leading-none capitalize cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            {season}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+
           </div>
           <div className="hidden">
           </div>
@@ -1288,7 +1282,7 @@ function EditPackagePage({
                     initialContent={field.value || ""}
                     onChange={(content) => field.onChange(content)}
                     placeholder="Write package note..."
-                    className="h- pb-8"
+                    className="pb-8"
                   />
                 </FormControl>
                 <FormMessage />
@@ -1297,7 +1291,7 @@ function EditPackagePage({
           />
 
           {/* Form Actions - Sticky at bottom */}
-          <div className="sticky bottom-0 flex justify-end gap-4 pt-6 pb-6 mt-6 bg-background border-t">
+          <div className="sticky bottom-0 flex justify-end gap-4  bg-background ">
             <Button
               type="button"
               variant="outline"

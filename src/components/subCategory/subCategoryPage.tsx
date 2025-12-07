@@ -296,7 +296,7 @@ function SubCategoryForm({
                     initialContent={value}
                     onChange={(content) => setValue(content || "")}
                     placeholder="Write something..."
-                    className="h-64 pb-10"
+                    className=" pb-10"
                   />
                 </FormControl>
                 <FormMessage />

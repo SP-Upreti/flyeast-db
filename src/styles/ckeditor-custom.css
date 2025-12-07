@@ -20,7 +20,7 @@
   border-bottom: 1px solid #e5e7eb !important;
   padding: 0.75rem !important;
   position: relative !important;
-  z-index: 100 !important;
+  z-index: 20 !important;
   overflow: visible !important;
 }
 
@@ -37,7 +37,7 @@
 /* Focus state */
 .ckeditor-wrapper .ck-editor__editable:focus {
   outline: none;
-  box-shadow: none;
+  box-shadow: none !important;
   border-color: #f97316 !important;
 }
 
