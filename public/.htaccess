@@ -10,13 +10,13 @@
 
 # Proxy API requests to the actual API server
 # This prevents API calls from being served index.html
-RewriteCond %{REQUEST_URI} ^/api/
-RewriteRule ^api/(.*)$ https://flyeastapi.webxnepal.com/api/v1/$1 [P,L]
+# RewriteCond %{REQUEST_URI} ^/api/
+# RewriteRule ^api/(.*)$ https://flyeastapi.webxnepal.com/api/v1/$1 [P,L]
 
 # If mod_proxy is not available (common on shared hosting), use redirect instead
-# Uncomment the following two lines and comment out the [P,L] rule above:
-# RewriteCond %{REQUEST_URI} ^/api/
-# RewriteRule ^api/(.*)$ https://flyeastapi.webxnepal.com/api/v1/$1 [R=307,L]
+# Using redirect since proxy may not be available:
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ https://flyeastapi.webxnepal.com/api/v1/$1 [R=307,L]
 
 # Handle index.html
   RewriteRule ^index\.html$ - [L]

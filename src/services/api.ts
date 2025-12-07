@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const isProduction = import.meta.env.PROD;
+
 export const api = axios.create({
-  baseURL: `/api`,
-  withCredentials: true,
+  baseURL: isProduction ? `/.netlify/functions/api-proxy` : `/api`,
+  withCredentials: !isProduction, // Only for local dev
   headers: {
     "Content-Type": "application/json",
   },
