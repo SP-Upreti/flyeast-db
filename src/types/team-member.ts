@@ -1,0 +1,21 @@
+export type Member = {
+  _id: string;
+  name: string;
+  designation: string;
+  image: string;
+  memberType: 'boardmember' | 'fieldhero';
+  countryCode: string;
+  phoneNumber?: string;
+  description: string;
+  gallery?: string[];
+  cvImage?: string;
+  facebook?: string;
+  twitter?: string;
+  linkedin?: string;
+  instagram?: string;
+  addToHome?: boolean;
+  sortOrder?: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
