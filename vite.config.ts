@@ -25,7 +25,7 @@ export default defineConfig(({ command, mode }) => ({
         configure: (proxy) => {
           proxy.on("proxyReq", (proxyReq) => {
             proxyReq.setHeader("Origin", "https://flyeastadmin.webxnepal.com");
-            proxyReq.setHeader("Referer", "https://flyeastadmin.webxnepal.com/");
+            proxyReq.setHeader("Referer", "https://flyeastadmin.webxnepal.com/dashboard/");
           });
 
           proxy.on("error", (err) => console.log("proxy error", err));

@@ -1,8 +1,7 @@
 import axios from "axios";
 
-// Both dev and production use /api - Vite/Vercel proxy handles forwarding
 export const api = axios.create({
-  baseURL: '/api',
+  baseURL: `/api`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
