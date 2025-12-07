@@ -154,7 +154,7 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
 
   // Form submission
   const onSubmit = async (values: any) => {
-    setIsCreating(isPending);
+    setIsCreating(true);
     try {
       const formData = new FormData();
 
@@ -207,7 +207,7 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
       toast.error(error?.response?.data?.message || "Failed to create package");
       console.error("Error:", error);
     } finally {
-      setIsCreating(isPending);
+      setIsCreating(false);
     }
   };
 
@@ -260,7 +260,13 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-24">
+        <form onSubmit={form.handleSubmit(onSubmit, err => {
+          const firstError = Object.values(err)[0];
+          if (firstError && firstError.message) {
+            toast.error(firstError?.message.toString() || "Please check the form for errors.");
+          }
+          console.log("Form errors:", err);
+        })} className="space-y-6 pb-24">
           {/* Basic Information */}
           <div className=" ">
             <h3 className="font-medium mb-4">Basic Information</h3>

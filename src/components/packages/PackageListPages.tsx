@@ -119,12 +119,17 @@ export default function PackageListPage() {
 
   // Otherwise show the list view
   return (
+    <>
+
+      <pre>{JSON.stringify(params, null, 2)}</pre>
+
     <PackageListView
       onShowCreate={() => setShowCreateModal(true)}
       subcategoryId={params.id as string}
       categoryId={params.cid as string}
       onEditPackage={(id) => setEditingPackageId(id)}
     />
+    </>
   );
 }
 
@@ -794,6 +799,9 @@ function EditPackagePage({
         }
       });
 
+      // Add subcategoryId separately
+      // formData.append("subCategoryId", values.subCategoryId || subcategoryId);
+
       // Add files
       if (coverImageFile) formData.append("coverImage", coverImageFile);
       if (routeMapFile) formData.append("routeMap", routeMapFile);
@@ -859,9 +867,9 @@ function EditPackagePage({
       const packageData = data.data;
 
       const subCategoryIdValue =
-        typeof packageData.subCategoryId === "object"
-          ? packageData.subCategoryId?.id
-          : subcategoryId;
+        typeof packageData.subCategoryId === "object" && packageData.subCategoryId !== null
+          ? packageData.subCategoryId?._id || packageData.subCategoryId?.id
+          : packageData.subCategoryId || subcategoryId;
       // Set form values
       form.reset({
         ...packageData,
@@ -904,7 +912,11 @@ function EditPackagePage({
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-24">
+        <form onSubmit={form.handleSubmit(onSubmit, err => {
+          const errors = Object.values(err).map(e => e.message).join(", ");
+          toast.error(`Please fix the following errors: ${errors}`);
+          console.log("Form errors:", err);
+        })} className="space-y-6 pb-24">
           {/* Basic Information */}
           <div className="">
             <h3 className="font-medium mb-4">Basic Information</h3>
