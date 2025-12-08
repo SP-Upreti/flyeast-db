@@ -1,33 +1,18 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { FilePenLine, Loader, Upload } from "lucide-react";
-import { api } from "@/services/api";
+import { Loader } from "lucide-react";
 import { toast } from "sonner";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   useCreateAttraction,
-  useUpdateAttraction,
 } from "@/hooks/useAttraction";
 import RichTextEditor from "../RichTextEditor";
 
 interface AttractionData {
-  title: string;
   description: string;
-  image?: string;
-  days?: string;
-  imageFile?: File;
 }
 
 export default function CreateAttractionSheet({
-  id,
   onClose,
 }: {
   id: string;
@@ -36,15 +21,10 @@ export default function CreateAttractionSheet({
 }) {
   const params = useParams();
 
-  // const [isUpdating, setIsUpdating] = useState(false);
   const [formData, setFormData] = useState<AttractionData>({
-    title: "",
     description: "",
-    image: "",
-    days: "",
   });
   const [errors, setErrors] = useState<Partial<AttractionData>>({});
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutateAsync: createAttraction, isPending } = useCreateAttraction();
@@ -52,7 +32,6 @@ export default function CreateAttractionSheet({
   const validateForm = () => {
     const newErrors: Partial<AttractionData> = {};
 
-    if (!formData.title.trim()) newErrors.title = "Title is required";
     if (!formData.description.trim())
       newErrors.description = "Description is required";
 
@@ -65,13 +44,9 @@ export default function CreateAttractionSheet({
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
-      formDataToSend.append("days", formData.days || "");
 
-      if (formData.imageFile) {
-        formDataToSend.append("image", formData.imageFile);
-      }
+
 
       await createAttraction(
         {
@@ -82,10 +57,7 @@ export default function CreateAttractionSheet({
           onSuccess: () => {
             toast.success("Attraction created successfully");
             setFormData({
-              title: "",
               description: "",
-              days: "",
-              imageFile: undefined,
             });
             setIsOpen(false);
             onClose(); // Navigate back to list page
@@ -98,10 +70,7 @@ export default function CreateAttractionSheet({
 
       // toast.success("Attraction created successfully");
       setFormData({
-        title: "",
         description: "",
-        days: "",
-        imageFile: undefined,
       });
     } catch (error) {
       toast.error("Failed to create attraction");
@@ -118,24 +87,7 @@ export default function CreateAttractionSheet({
           Close
         </Button>
       </div>
-      {/* Title Field */}
-      <div className="space-y-2">
-        <label
-          htmlFor="title"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Title <span className="text-red-500">*</span>
-        </label>
-        <input
-          id="title"
-          type="text"
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full rounded-[2px] border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          placeholder="Enter title"
-        />
-        {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
-      </div>
+
 
       {/* Description Field */}
       <div className="space-y-2">
@@ -150,7 +102,7 @@ export default function CreateAttractionSheet({
           onChange={(content) =>
             setFormData({ ...formData, description: content })
           }
-          className="w-full rounded-[2px] border px-3 py-2 text-sm min-h-[100px] shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full rounded-[2px]   text-sm min-h-[100px]  focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="Enter description"
         />
         {errors.description && (

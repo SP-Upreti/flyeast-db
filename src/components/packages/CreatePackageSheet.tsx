@@ -267,7 +267,6 @@ export default function PackageListPage({ onClose }: { onClose: () => void }) {
           }
           console.log("Form errors:", err);
         })} className="space-y-6 pb-24">
-          {/* Basic Information */}
           <div className=" ">
             <h3 className="font-medium mb-4">Basic Information</h3>
 

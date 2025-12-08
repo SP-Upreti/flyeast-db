@@ -120,9 +120,6 @@ export default function PackageListPage() {
   // Otherwise show the list view
   return (
     <>
-
-      <pre>{JSON.stringify(params, null, 2)}</pre>
-
     <PackageListView
       onShowCreate={() => setShowCreateModal(true)}
       subcategoryId={params.id as string}
@@ -270,9 +267,9 @@ function PackageListView({
         return (
           <>
             {item.isPopular ? (
-              <span className="flex gap-2 items-center text-green-500"><Circle className="fill-green-500 size-2" /> Popular</span>
+              <span className="flex gap-2 font-semibold items-center text-green-500"><Circle className="fill-green-500 size-2" /> Popular</span>
             ) : (
-              <span className="flex gap-2 items-center text-blue-500"> <Circle className="fill-blue-500 size-2" />Not Popular</span>
+                <span className="flex gap-2 font-semibold items-center text-blue-500"> <Circle className="fill-blue-500 size-2" />Unpopular</span>
             )}
           </>
         );
@@ -284,7 +281,7 @@ function PackageListView({
       enableHiding: false,
       cell: ({ row }) => {
         const item = row.original;
-        const isCurrentlyDeleting = deletingId === item.id;
+        const isCurrentlyDeleting = deletingId === row?.original?.id || row?.original?._id;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -323,7 +320,7 @@ function PackageListView({
 
                 <Link
                   to={{
-                    pathname: `/dashboard/gallery/${item.id}`,
+                    pathname: `/dashboard/gallery/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none w-full items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b border-b border-b-zinc-200 "
@@ -338,7 +335,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/attraction/${item.id}`,
+                    pathname: `/dashboard/attraction/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none w-full items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b  border-b-zinc-200 "
@@ -354,7 +351,7 @@ function PackageListView({
 
                 <Link
                   to={{
-                    pathname: `/dashboard/inclusion/${item.id}`,
+                    pathname: `/dashboard/inclusion/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className=" flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b  border-b-zinc-200 "
@@ -369,7 +366,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/exclusion/${item.id}`,
+                    pathname: `/dashboard/exclusion/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b border-b border-b-zinc-200 "
@@ -384,7 +381,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/gear/${item.id}`,
+                    pathname: `/dashboard/gear/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className=" flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b  border-b-zinc-200 "
@@ -400,7 +397,7 @@ function PackageListView({
 
                 <Link
                   to={{
-                    pathname: `/dashboard/dateandpricing/${item.id}`,
+                    pathname: `/dashboard/dateandpricing/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                     hash: row.getValue("duration"),
                   }}
@@ -416,7 +413,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/pax/${item.id}`,
+                    pathname: `/dashboard/pax/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className=" flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b border-b border-b-zinc-200 "
@@ -431,7 +428,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/Itinerary/${item.id}`,
+                    pathname: `/dashboard/Itinerary/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b border-b border-b-zinc-200 "
@@ -446,7 +443,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/faq/${item.id}`,
+                    pathname: `/dashboard/faq/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className=" flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b border-b border-b-zinc-200 "
@@ -462,7 +459,7 @@ function PackageListView({
 
                 <Link
                   to={{
-                    pathname: `/dashboard/requirements/${item.id}`,
+                    pathname: `/dashboard/requirements/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center  px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b border-b border-b-zinc-200"
@@ -477,7 +474,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/addons/${item.id}`,
+                    pathname: `/dashboard/addons/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center  px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b"
@@ -487,7 +484,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/package-info/${item.id}`,
+                    pathname: `/dashboard/package-info/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center  px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b "
@@ -502,7 +499,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/video-review/${item.id}`,
+                    pathname: `/dashboard/video-review/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center  px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b "
@@ -517,7 +514,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/season-info/${item.id}`,
+                    pathname: `/dashboard/season-info/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center  px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b "
@@ -532,7 +529,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/why-love/${item.id}`,
+                    pathname: `/dashboard/why-love/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center  px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b "
@@ -547,7 +544,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/important-notice/${item.id}`,
+                    pathname: `/dashboard/important-notice/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center  px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b "
@@ -562,7 +559,7 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
-                    pathname: `/dashboard/insurance/${item.id}`,
+                    pathname: `/dashboard/insurance/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
                   className="flex cursor-default select-none items-center  px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b "

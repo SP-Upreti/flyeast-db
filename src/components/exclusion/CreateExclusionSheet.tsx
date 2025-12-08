@@ -10,10 +10,7 @@ import {
 import RichTextEditor from "../RichTextEditor";
 
 interface ExclusionData {
-  title: string;
   description: string;
-  sortOrder?: number;
-  isActive?: boolean;
 }
 
 export default function CreateExclusionSheet({
@@ -26,10 +23,7 @@ export default function CreateExclusionSheet({
   onClose?: () => void;
 }) {
   const [formData, setFormData] = useState<ExclusionData>({
-    title: "",
     description: "",
-    sortOrder: 0,
-    isActive: true,
   });
 
   const { data: existingExclusion } = useGetExclusion(editId || "");
@@ -37,10 +31,8 @@ export default function CreateExclusionSheet({
   useEffect(() => {
     if (editId && existingExclusion) {
       setFormData({
-        title: existingExclusion.title || "",
         description: existingExclusion.description || "",
-        sortOrder: existingExclusion.sortOrder || 0,
-        isActive: existingExclusion.isActive ?? true,
+
       });
     }
   }, [editId, existingExclusion]);
@@ -56,7 +48,6 @@ export default function CreateExclusionSheet({
   const validateForm = () => {
     const newErrors: Partial<ExclusionData> = {};
 
-    if (!formData.title.trim()) newErrors.title = "Title is required";
     if (!formData.description.trim())
       newErrors.description = "Description is required";
 
@@ -72,10 +63,8 @@ export default function CreateExclusionSheet({
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
-      formDataToSend.append("sortOrder", (formData.sortOrder || 0).toString());
-      formDataToSend.append("isActive", (formData.isActive ?? true).toString());
+
 
       if (editId) {
         // Update existing exclusion
@@ -93,10 +82,7 @@ export default function CreateExclusionSheet({
       // Reset form
       if (!editId) {
         setFormData({
-          title: "",
           description: "",
-          sortOrder: 0,
-          isActive: true,
         });
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
@@ -125,70 +111,8 @@ export default function CreateExclusionSheet({
         </div>
 
         <div className="space-y-6">
-          <div className="grid gap-4 lg:grid-cols-2">
-            {/* Title */}
-            <div className="flex flex-col gap-1">
-              <label
-                htmlFor="title"
-                className="text-sm font-medium text-gray-700"
-              >
-                Title
-              </label>
-              <input
-                id="title"
-                type="text"
-                value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
-                className="rounded-[2px] border border-gray-300 px-4 py-2 text-sm  placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Enter title"
-              />
-              {errors.title && (
-                <p className="text-sm text-red-600 mt-1">{errors.title}</p>
-              )}
-            </div>
 
 
-            {/* Sort Order */}
-            <div className="flex flex-col gap-1">
-              <label
-                htmlFor="sortOrder"
-                className="text-sm font-medium text-gray-700"
-              >
-                Sort Order
-              </label>
-              <input
-                id="sortOrder"
-                type="number"
-                value={formData.sortOrder}
-                onChange={(e) =>
-                  setFormData({ ...formData, sortOrder: Number(e.target.value) })
-                }
-                className="rounded-[2px] border border-gray-300 px-4 py-2 text-sm  placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Enter sort order"
-              />
-            </div>
-          </div>
-
-          {/* Is Active */}
-          <div className="flex items-center gap-2">
-            <input
-              id="isActive"
-              type="checkbox"
-              checked={formData.isActive}
-              onChange={(e) =>
-                setFormData({ ...formData, isActive: e.target.checked })
-              }
-              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-            />
-            <label
-              htmlFor="isActive"
-              className="text-sm font-medium text-gray-700"
-            >
-              Is Active
-            </label>
-          </div>
 
           {/* Description */}
           <div className="flex flex-col gap-1">
@@ -203,7 +127,7 @@ export default function CreateExclusionSheet({
               onChange={(
                 content // content is the HTML string directly
               ) => setFormData({ ...formData, description: content })}
-              className="rounded-[2px] border border-gray-300 px-4 py-2 text-sm  placeholder-gray-400 min-h-[80px] resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              className="rounded-[2px] border border-gray-300  text-sm  placeholder-gray-400 min-h-[80px] resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Enter description"
             />
             {errors.description && (

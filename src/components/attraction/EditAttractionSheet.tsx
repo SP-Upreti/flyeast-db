@@ -1,25 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { FilePenLine, Loader, Upload } from "lucide-react";
+import { Loader } from "lucide-react";
 import { api } from "@/services/api";
 import { toast } from "sonner";
 import { useUpdateAttraction } from "@/hooks/useAttraction";
 import RichTextEditor from "../RichTextEditor";
 
 interface AttractionData {
-  title: string;
   description: string;
-  image?: string;
-  days?: string;
-  imageFile?: File;
 }
 
 export default function EditAttractionSheet({
@@ -32,10 +20,7 @@ export default function EditAttractionSheet({
   const [isOpen, setIsOpen] = useState(false);
 
   const [formData, setFormData] = useState<AttractionData>({
-    title: "",
     description: "",
-    image: "",
-    days: "",
   });
   const [errors, setErrors] = useState<Partial<AttractionData>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,10 +30,7 @@ export default function EditAttractionSheet({
   useEffect(() => {
     if (data) {
       setFormData({
-        title: data.title || "",
         description: data.description || "",
-        image: data.image || "",
-        days: data.days || "",
       });
     }
   }, [data]);
@@ -60,10 +42,7 @@ export default function EditAttractionSheet({
         if (response.data?.data) {
           const attractionData = response.data.data;
           setData({
-            title: attractionData.title || "",
             description: attractionData.description || "",
-            image: attractionData.image || "",
-            days: attractionData.days || "",
           });
         } else {
           console.error("No data found in response:", response);
@@ -80,7 +59,6 @@ export default function EditAttractionSheet({
   const validateForm = () => {
     const newErrors: Partial<AttractionData> = {};
 
-    if (!formData.title.trim()) newErrors.title = "Title is required";
     if (!formData.description.trim())
       newErrors.description = "Description is required";
 
@@ -93,22 +71,14 @@ export default function EditAttractionSheet({
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
-      formDataToSend.append("days", formData.days || "");
 
-      if (formData.imageFile) {
-        formDataToSend.append("image", formData.imageFile);
-      }
 
       updateAttraction(formDataToSend, {
         onSuccess: () => {
           toast.success("Attraction updated successfully");
           setFormData({
-            title: "",
             description: "",
-            days: "",
-            imageFile: undefined,
           });
           setIsOpen(false);
         },
@@ -133,24 +103,6 @@ export default function EditAttractionSheet({
           </Button>
         </div>
         <div className="grid gap-4 py-4">
-          <div className="grid gap-2">
-            <label htmlFor="title" className="text-sm font-medium">
-              Title
-            </label>
-            <input
-              id="title"
-              type="text"
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              className="flex h-10 w-full rounded-[2px] border px-3 py-2 text-sm shadow-sm"
-              placeholder="Enter title"
-            />
-            {errors.title && (
-              <p className="text-sm text-red-500">{errors.title}</p>
-            )}
-          </div>
 
           <div className="grid gap-2">
             <label htmlFor="description" className="text-sm font-medium">

@@ -10,13 +10,7 @@ import { Loader } from "lucide-react";
 import RichTextEditor from "../RichTextEditor";
 
 interface InclusionData {
-  title: string;
   description: string;
-  image?: string;
-  days?: string;
-  sortOrder?: number;
-  isActive?: boolean;
-  imageFile?: File | null;
 }
 
 export default function CreateInclusionSheet({
@@ -29,11 +23,7 @@ export default function CreateInclusionSheet({
   onClose?: () => void;
 }) {
   const [formData, setFormData] = useState<InclusionData>({
-    title: "",
     description: "",
-    days: "",
-    sortOrder: 0,
-    isActive: true,
   });
 
   const { data: existingInclusion } = useGetInclusion(editId || "");
@@ -41,11 +31,7 @@ export default function CreateInclusionSheet({
   useEffect(() => {
     if (editId && existingInclusion) {
       setFormData({
-        title: existingInclusion.title || "",
         description: existingInclusion.description || "",
-        days: existingInclusion.days || "",
-        sortOrder: existingInclusion.sortOrder || 0,
-        isActive: existingInclusion.isActive ?? true,
       });
     }
   }, [editId, existingInclusion]);
@@ -60,7 +46,6 @@ export default function CreateInclusionSheet({
   const validateForm = () => {
     const newErrors: Partial<InclusionData> = {};
 
-    if (!formData.title.trim()) newErrors.title = "Title is required";
     if (!formData.description.trim())
       newErrors.description = "Description is required";
 
@@ -76,16 +61,8 @@ export default function CreateInclusionSheet({
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
-      if (formData.days) formDataToSend.append("days", formData.days);
-      if (formData.sortOrder !== undefined)
-        formDataToSend.append("sortOrder", formData.sortOrder.toString());
-      if (formData.isActive !== undefined)
-        formDataToSend.append("isActive", formData.isActive.toString());
-      if (formData.imageFile) {
-        formDataToSend.append("image", formData.imageFile);
-      }
+   
 
       if (editId) {
         // Update existing inclusion
@@ -103,11 +80,7 @@ export default function CreateInclusionSheet({
       // Reset form
       if (!editId) {
         setFormData({
-          title: "",
           description: "",
-          days: "",
-          sortOrder: 0,
-          isActive: true,
         });
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
@@ -140,64 +113,8 @@ export default function CreateInclusionSheet({
       </header>
 
       <form className="grid gap-6" onSubmit={handleSubmit}>
-        <div className="grid md:grid-cols-2 gap-4 items-center">
-          {/* Title */}
-          <div className="grid gap-1">
-            <label htmlFor="title" className="text-sm font-medium">
-              Title
-            </label>
-            <input
-              id="title"
-              type="text"
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              className="h-10 w-full rounded-[2px] border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
-              placeholder="Enter title"
-              aria-invalid={!!errors.title}
-              aria-describedby="title-error"
-            />
-            {errors.title && (
-              <p id="title-error" className="text-sm text-red-500">
-                {errors.title}
-              </p>
-            )}
-          </div>
+        
 
-          {/* Sort Order */}
-          <div className="space-y-2">
-            <label htmlFor="sortOrder" className="text-sm font-medium">
-              Sort Order
-            </label>
-            <input
-              id="sortOrder"
-              type="number"
-              value={formData.sortOrder}
-              onChange={(e) =>
-                setFormData({ ...formData, sortOrder: Number(e.target.value) })
-              }
-              className="h-10 w-full rounded-[2px] border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
-              placeholder="Enter sort order"
-            />
-          </div>
-        </div>
-
-        {/* Is Active */}
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            id="isActive"
-            checked={formData.isActive ?? true}
-            onChange={(e) =>
-              setFormData({ ...formData, isActive: e.target.checked })
-            }
-            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-          />
-          <label htmlFor="isActive" className="text-sm font-medium">
-            Is Active
-          </label>
-        </div>
 
         {/* Description */}
         <div className="space-y-2">

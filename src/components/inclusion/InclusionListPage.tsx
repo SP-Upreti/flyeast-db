@@ -146,10 +146,6 @@ export default function InclusionListPage() {
       cell: ({ row }) => <div>{parseInt(row.id) + 1}</div>,
     },
     {
-      accessorKey: "title",
-      header: "Title",
-    },
-    {
       accessorKey: "description",
       header: "Description",
       cell: ({ row }) => (

@@ -6,10 +6,7 @@ import { useUpdateExclusion, useGetExclusion } from "@/hooks/useExclusion";
 import RichTextEditor from "../RichTextEditor";
 
 interface ExclusionData {
-  title: string;
   description: string;
-  sortOrder: number;
-  isActive: boolean;
 }
 
 interface EditExclusionSheetProps {
@@ -24,10 +21,7 @@ export default function EditExclusionSheet({
   onClose,
 }: EditExclusionSheetProps) {
   const [formData, setFormData] = useState<ExclusionData>({
-    title: "",
     description: "",
-    sortOrder: 0,
-    isActive: true,
   });
 
   const [errors, setErrors] = useState<Partial<ExclusionData>>({});
@@ -40,10 +34,7 @@ export default function EditExclusionSheet({
   useEffect(() => {
     if (existingExclusion) {
       setFormData({
-        title: existingExclusion.title || "",
         description: existingExclusion.description || "",
-        sortOrder: existingExclusion.sortOrder || 0,
-        isActive: existingExclusion.isActive ?? true,
       });
     }
   }, [existingExclusion]);
@@ -52,10 +43,6 @@ export default function EditExclusionSheet({
     const newErrors: Partial<ExclusionData> = {};
     let isValid = true;
 
-    if (!formData.title.trim()) {
-      newErrors.title = "Title is required";
-      isValid = false;
-    }
     if (!formData.description.trim()) {
       newErrors.description = "Description is required";
       isValid = false;
@@ -71,10 +58,7 @@ export default function EditExclusionSheet({
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
-      formDataToSend.append("sortOrder", formData.sortOrder.toString());
-      formDataToSend.append("isActive", formData.isActive.toString());
 
       await updateExclusion(formDataToSend);
       toast.success("Exclusion updated successfully");
@@ -106,24 +90,7 @@ export default function EditExclusionSheet({
           </div>
         ) : (
           <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <label htmlFor="title" className="text-sm font-medium">
-                Title
-              </label>
-              <input
-                id="title"
-                type="text"
-                value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
-                className="flex h-10 w-full rounded-[2px] border px-3 py-2 text-sm "
-                placeholder="Enter title"
-              />
-              {errors.title && (
-                <p className="text-sm text-red-500">{errors.title}</p>
-              )}
-            </div>
+
 
             <div className="grid gap-2">
               <label htmlFor="description" className="text-sm font-medium">

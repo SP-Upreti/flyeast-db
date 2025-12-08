@@ -46,7 +46,7 @@ export function InclusionViewModal({
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-2">
             <FileText className="h-6 w-6" />
-            {inclusionData.title}
+            {inclusionData.title || "Inclusion Details"}
           </DialogTitle>
         </DialogHeader>
 

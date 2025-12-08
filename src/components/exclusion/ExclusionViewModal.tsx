@@ -40,7 +40,7 @@ export function ExclusionViewModal({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <X className="w-5 h-5 text-red-600" />
-            {exclusionData.title}
+            {exclusionData.title || "Exclusion Details"}
           </DialogTitle>
         </DialogHeader>
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect,  useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -8,7 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { FilePenLine, Loader, Upload } from "lucide-react";
+import { FilePenLine, Loader } from "lucide-react";
 import { api } from "@/services/api";
 import { toast } from "sonner";
 import { useParams } from "react-router-dom";
@@ -16,20 +16,14 @@ import { useUpdateInclusion } from "@/hooks/useInclusion";
 import RichTextEditor from "../RichTextEditor";
 
 interface InclusionData {
-  title: string;
   description: string;
-  image?: string;
-  days?: string;
-  imageFile?: File;
 }
 
 export default function EditInclusionSheet({ id }: { id: string }) {
   const params = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<InclusionData>({
-    title: "",
     description: "",
-    days: "",
   });
   const [errors, setErrors] = useState<Partial<InclusionData>>({});
   const { mutateAsync: updateInclusion, isPending: isUpdating } =
@@ -41,10 +35,7 @@ export default function EditInclusionSheet({ id }: { id: string }) {
         const response = await api.get(`/inclusion/${id}`);
         const fetchedData = response.data.data;
         setFormData({
-          title: fetchedData.title || "",
           description: fetchedData.description || "",
-          days: fetchedData.days || "",
-          image: fetchedData.image,
         });
       } catch (error) {
         toast.error("Failed to fetch inclusion data");
@@ -56,7 +47,6 @@ export default function EditInclusionSheet({ id }: { id: string }) {
   const validateForm = () => {
     const newErrors: Partial<InclusionData> = {};
 
-    if (!formData.title.trim()) newErrors.title = "Title is required";
     if (!formData.description.trim())
       newErrors.description = "Description is required";
 
@@ -69,20 +59,11 @@ export default function EditInclusionSheet({ id }: { id: string }) {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
-      if (formData.days) formDataToSend.append("days", formData.days);
-      if (formData.imageFile) {
-        formDataToSend.append("image", formData.imageFile);
-      }
-
       await updateInclusion(formDataToSend, {
         onSuccess: () => {
-          setFormData({
-            title: "",
+          setFormData({            
             description: "",
-            days: "",
-            imageFile: undefined,
           });
           setIsOpen(false);
         },
@@ -115,25 +96,7 @@ export default function EditInclusionSheet({ id }: { id: string }) {
           </SheetDescription>
         </SheetHeader>
         <div className="grid gap-4 py-4">
-          {/* Title */}
-          <div className="grid gap-2">
-            <label htmlFor="title" className="text-sm font-medium">
-              Title
-            </label>
-            <input
-              id="title"
-              type="text"
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              className="flex h-10 w-full rounded-[2px] border px-3 py-2 text-sm shadow-sm"
-              placeholder="Enter title"
-            />
-            {errors.title && (
-              <p className="text-sm text-red-500">{errors.title}</p>
-            )}
-          </div>
+       
 
           {/* Description */}
           <div className="space-y-2">
