@@ -107,6 +107,31 @@ export const useUpdatePackage = (id: string) => {
   });
 };
 
+// Update package status (partial update)
+export const useUpdatePackageStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: any }) => {
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, String(value));
+      });
+
+      const response = await api.put(`package/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data.data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["packages"] });
+      queryClient.invalidateQueries({ queryKey: ["package", variables.id] });
+    },
+  });
+};
+
 // Delete package
 export const useDeletePackage = () => {
   const queryClient = useQueryClient();

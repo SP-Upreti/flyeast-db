@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowLeft, Circle, Loader, MoreHorizontal, Plus } from "lucide-react";
+import { ArrowLeft, Loader, MoreHorizontal, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -23,7 +23,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Icon } from "@iconify/react/dist/iconify.js";
-
 import Breadcumb from "@/components/dashboard/Breadcumb";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CaretSortIcon } from "@radix-ui/react-icons";
@@ -33,6 +32,7 @@ import {
   useDeletePackage,
   useGetPackagesBySubCategory,
   useUpdatePackage,
+  useUpdatePackageStatus,
 } from "@/hooks/usePackage.ts";
 import PackageCreate from "./CreatePackageSheet.tsx";
 import { TableShimmer } from "@/components/table-shimmer.tsx";
@@ -104,7 +104,6 @@ export default function PackageListPage() {
   const [editingPackageId, setEditingPackageId] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  // If we're in edit mode, show the edit form
   if (editingPackageId) {
     return (
       <EditPackagePage
@@ -117,15 +116,14 @@ export default function PackageListPage() {
     return <PackageCreate onClose={() => setShowCreateModal(false)} />;
   }
 
-  // Otherwise show the list view
   return (
     <>
-    <PackageListView
-      onShowCreate={() => setShowCreateModal(true)}
-      subcategoryId={params.id as string}
-      categoryId={params.cid as string}
-      onEditPackage={(id) => setEditingPackageId(id)}
-    />
+      <PackageListView
+        onShowCreate={() => setShowCreateModal(true)}
+        subcategoryId={params.id as string}
+        categoryId={params.cid as string}
+        onEditPackage={(id) => setEditingPackageId(id)}
+      />
     </>
   );
 }
@@ -178,6 +176,39 @@ function PackageListView({
   };
 
 
+
+  const PopularToggle = ({ item }: { item: any }) => {
+    const { mutateAsync: updateStatus } = useUpdatePackageStatus();
+    const [loading, setLoading] = useState(false);
+
+    // Handle both boolean and string boolean from API
+    const isPopular = item.isPopular === true || item.isPopular === "true";
+
+    const handleToggle = async (checked: boolean) => {
+      setLoading(true);
+      try {
+        await updateStatus({
+          id: item._id || item.id,
+          data: { isPopular: checked },
+        });
+        toast.success(`Package marked as ${checked ? "popular" : "unpopular"}`);
+      } catch (error: any) {
+        toast.error(error.message || "Failed to update status");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    return (
+      <div className="flex items-center space-x-2">
+        <Switch
+          checked={isPopular}
+          onCheckedChange={handleToggle}
+          disabled={loading}
+        />
+      </div>
+    );
+  };
 
   const columns: ColumnDef<any>[] = [
     {
@@ -262,18 +293,7 @@ function PackageListView({
     {
       accessorKey: "isPopular",
       header: "Popular",
-      cell: ({ row }) => {
-        const item = row.original;
-        return (
-          <>
-            {item.isPopular ? (
-              <span className="flex gap-2 font-semibold items-center text-green-500"><Circle className="fill-green-500 size-2" /> Popular</span>
-            ) : (
-                <span className="flex gap-2 font-semibold items-center text-blue-500"> <Circle className="fill-blue-500 size-2" />Unpopular</span>
-            )}
-          </>
-        );
-      },
+      cell: ({ row }) => <PopularToggle item={row.original} />,
     },
     {
       id: "actions",
@@ -443,6 +463,21 @@ function PackageListView({
                 </Link>
                 <Link
                   to={{
+                    pathname: `/dashboard/short-itinerary/${row?.original?.id || row?.original?._id}`,
+                    search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
+                  }}
+                  className="flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 gap-2 border-b border-b border-b-zinc-200 "
+                >
+                  <img
+                    src={"/icons/packages/travel.png"}
+                    alt="short-itinerary-image"
+                    width={15}
+                    height={15}
+                  />
+                  Short Day Itinerary
+                </Link>
+                <Link
+                  to={{
                     pathname: `/dashboard/faq/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
                   }}
@@ -527,7 +562,7 @@ function PackageListView({
                   />
                   Season Info
                 </Link>
-                <Link
+                {/* <Link
                   to={{
                     pathname: `/dashboard/why-love/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
@@ -541,8 +576,8 @@ function PackageListView({
                     height={15}
                   />
                   Why Love This
-                </Link>
-                <Link
+                </Link> */}
+                {/* <Link
                   to={{
                     pathname: `/dashboard/important-notice/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
@@ -556,8 +591,8 @@ function PackageListView({
                     height={15}
                   />
                   Important Notice
-                </Link>
-                <Link
+                </Link> */}
+                {/* <Link
                   to={{
                     pathname: `/dashboard/insurance/${row?.original?.id || row?.original?._id}`,
                     search: `?category=${category?.name}&subcategory=${subcategory?.name}&package=${item?.name}`,
@@ -571,7 +606,7 @@ function PackageListView({
                     height={15}
                   />
                   Insurance
-                </Link>
+                </Link> */}
               </div>
 
               <AlertDialog>
@@ -1021,42 +1056,42 @@ function EditPackagePage({
 
           <div className="flex gap-6 items-center">
             <FormField
-            control={form.control}
-            name="isPopular"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>Is Popular?</FormLabel>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              control={form.control}
+              name="isPopular"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Is Popular?</FormLabel>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="addToHome"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>Add to home ?</FormLabel>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="addToHome"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Add to home ?</FormLabel>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           {/* Overview */}

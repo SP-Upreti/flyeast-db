@@ -7,6 +7,9 @@ export type Member = {
   countryCode: string;
   phoneNumber?: string;
   description: string;
+  age?: string;
+  yearsOfExperience?: string;
+  specialization?: string;
   gallery?: string[];
   cvImage?: string;
   facebook?: string;

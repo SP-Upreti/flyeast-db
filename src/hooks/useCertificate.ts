@@ -1,9 +1,6 @@
-import type { certificate } from "@/types/certificate";
 import { certificateApi } from "../apis/api-call";
-
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-// models/certificate.interface.ts
 
 export interface Certificate {
   _id: string;
@@ -11,7 +8,7 @@ export interface Certificate {
   description: string;
   image: string;
   imagePublicId: string;
-  sortOrder?: number; // optional, since some items may not have it
+  sortOrder?: number; 
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -31,7 +28,7 @@ export interface CertificatePagination {
 
 export interface CertificateResponse {
   status: "success" | "error";
-  certificates: Certificate[];
+  data: Certificate[];
   pagination: CertificatePagination;
   message: string;
 }

@@ -97,7 +97,7 @@ export default function EditFaqSheet({ id, onClose }: EditFaqSheetProps) {
   };
 
   return (
-    <div className="p-6 w-full">
+    <div className=" w-full">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">Edit FAQ</h1>
@@ -126,7 +126,7 @@ export default function EditFaqSheet({ id, onClose }: EditFaqSheetProps) {
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
-            className="flex h-10 w-full rounded-[2px] border px-3 py-2 text-sm shadow-sm"
+            className="flex h-10 w-full rounded-[2px] border px-3 py-2 text-sm "
             placeholder="Enter title"
           />
           {errors.title && (
@@ -141,7 +141,7 @@ export default function EditFaqSheet({ id, onClose }: EditFaqSheetProps) {
           <RichTextEditor
             initialContent={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e })}
-            className="min-h-[80px] w-full rounded-[2px] border border-gray-300 px-3 py-2 text-sm shadow-sm resize-y focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="min-h-[80px] w-full text-sm shadow-sm resize-y focus:outline-none focus:ring-2 focus:ring-red-500"
             placeholder="Enter description"
             aria-invalid={!!errors.description}
             aria-describedby="description-error"
@@ -151,16 +151,18 @@ export default function EditFaqSheet({ id, onClose }: EditFaqSheetProps) {
           )}
         </div>
 
-        <Button onClick={handleSubmit} disabled={isUpdating} className="w-full">
-          {isUpdating ? (
-            <>
-              <Loader className="mr-2 h-4 w-4 animate-spin" />
-              Updating...
-            </>
-          ) : (
-            "Update Faq"
-          )}
-        </Button>
+        <div className="flex justify-end">
+          <Button onClick={handleSubmit} disabled={isUpdating} className="w-fit">
+            {isUpdating ? (
+              <>
+                <Loader className="mr-2 h-4 w-4 animate-spin" />
+                Updating...
+              </>
+            ) : (
+              "Update Faq"
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );

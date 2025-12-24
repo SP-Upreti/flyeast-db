@@ -64,9 +64,10 @@ export default function CertificatePage() {
             </Button>
           </div>
 
+
           <Suspense fallback={<TableShimmer />}>
             <CertificateTable
-              certificates={certificates?.certificates || []}
+                  certificates={certificates?.data || []}
               isLoading={isLoading}
               onEdit={setItemToEdit}
             />

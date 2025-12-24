@@ -73,9 +73,11 @@ export default function InfoPage() {
             </Button>
           </div>
 
+          {/* <pre>{JSON.stringify(response, null, 2)}</pre> */}
+
           <Suspense fallback={<TableShimmer />}>
             <ItemTable
-              pkgs={response?.data || []}
+              pkgs={response?.data?.data as any || []}
               isLoading={isLoading}
               onEdit={setItemToEdit}
               pagination={{

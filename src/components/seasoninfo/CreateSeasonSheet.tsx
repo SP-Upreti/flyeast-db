@@ -77,7 +77,7 @@ export default function CreateSeasonSheet({
   };
 
   return (
-    <div className="p-6 w-full">
+    <div className=" w-full">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">Create Season Info</h1>
@@ -85,14 +85,14 @@ export default function CreateSeasonSheet({
             Add a new season for this package
           </p>
         </div>
-       <Button
-                             onClick={handleClose}
-                             variant="outline"
-                             className="text-red-500 flex items-center gap-2 cursor-pointer"
-                           >
-                             <Icon icon="solar:exit-bold-duotone" width="24" height="24" />
-                             Exit
-                           </Button>
+        <Button
+          onClick={handleClose}
+          variant="outline"
+          className="text-red-500 flex items-center gap-2 cursor-pointer"
+        >
+          <Icon icon="solar:exit-bold-duotone" width="24" height="24" />
+          Exit
+        </Button>
       </div>
       <div className="grid gap-4 py-4">
         <div className="grid gap-2">
@@ -106,7 +106,7 @@ export default function CreateSeasonSheet({
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
-            className="flex h-10 w-full rounded-[2px] border px-3 py-2 text-sm shadow-sm"
+            className="flex h-10 w-full rounded-[2px] border px-3 py-2 text-sm"
             placeholder="Enter title"
           />
           {errors.title && (
@@ -137,7 +137,7 @@ export default function CreateSeasonSheet({
                   description: value,
                 })
               }
-              className="flex min-h-[60px] w-full rounded-[2px] border px-3 py-2 text-sm shadow-sm"
+              className="flex min-h-[60px] w-full text-sm"
               placeholder="Enter description"
             />
           </div>

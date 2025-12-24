@@ -12,11 +12,9 @@ interface GearData {
 
 export default function CreateGearSheet({
   id,
-  editId,
   onClose,
 }: {
-  id: string;
-  editId?: string | null;
+    id: string;
   onClose?: () => void;
 }) {
   const [formData, setFormData] = useState<GearData>({
@@ -25,7 +23,7 @@ export default function CreateGearSheet({
   });
   const [errors, setErrors] = useState<Partial<GearData>>({});
 
-  const { mutateAsync: createGear, isPending: isUpdating } = useCreateGear();
+  const { mutateAsync: createGear, isPending: isCreating } = useCreateGear();
 
   const validateForm = () => {
     const newErrors: Partial<GearData> = {};
@@ -50,9 +48,7 @@ export default function CreateGearSheet({
     try {
       await createGear({ packageId: id, body: formData });
 
-      toast.success(
-        editId ? "Gear updated successfully" : "Gear created successfully"
-      );
+      toast.success("Gear created successfully");
       if (onClose) onClose();
     } catch (error: any) {
       const message =
@@ -66,13 +62,9 @@ export default function CreateGearSheet({
   return (
     <div className="w-full  rounded-sm">
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">
-          {editId ? "Update Gear" : "Create Gear"}
-        </h1>
+        <h1 className="text-2xl font-semibold">Create Gear</h1>
         <p className="text-sm text-gray-600">
-          {editId
-            ? "Modify this gear item"
-            : "Add a new gear item for this package"}
+          Add a new gear item for this package
         </p>
       </header>
 
@@ -109,7 +101,7 @@ export default function CreateGearSheet({
           <RichTextEditor
             initialContent={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e })}
-            className="min-h-[80px] w-full rounded-[2px] border border-gray-300 px-3 py-2 text-sm shadow-sm resize-y focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="min-h-20 w-full  text-sm shadow-sm resize-y focus:outline-none focus:ring-2 focus:ring-red-500"
             placeholder="Enter description"
             aria-invalid={!!errors.description}
             aria-describedby="description-error"
@@ -126,20 +118,18 @@ export default function CreateGearSheet({
           <Button
             variant={"outline"}
             type="button"
-            disabled={isUpdating}
+            disabled={isCreating}
             className="mr-2 border"
             onClick={onClose}
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isUpdating}>
-            {isUpdating ? (
+          <Button type="submit" disabled={isCreating}>
+            {isCreating ? (
               <>
                 <Loader className="mr-2 h-4 w-4 animate-spin" />
-                {editId ? "Updating..." : "Creating..."}
+                Creating...
               </>
-            ) : editId ? (
-              "Update Gear"
             ) : (
               "Create Gear"
             )}

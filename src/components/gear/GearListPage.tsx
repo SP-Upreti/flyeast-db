@@ -71,7 +71,7 @@ export default function GearListPage() {
   const [viewingGear, setViewingGear] = useState<Gear | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  // const { data: gearData, isLoading } = useGetGear(params.id as string);
+  const { data: gearData, isLoading } = useGetGear(params.id as string);
   const { mutateAsync: deleteGear, isPending: isDeleting } = useDeleteGear();
 
   // ============= search params ===============///
@@ -218,7 +218,7 @@ export default function GearListPage() {
   ];
 
   const table = useReactTable({
-    data: [],
+    data: gearData || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -236,7 +236,7 @@ export default function GearListPage() {
     },
   });
 
-  // if (isLoading) return <TableShimmer />;
+  if (isLoading) return <TableShimmer />;
 
   return (
     <div className="w-full flex flex-col">
@@ -253,7 +253,9 @@ export default function GearListPage() {
         <EditGearSheet id={editId} onClose={() => setEditId(null)} />
       )}
 
-      <div className="flex flex-col sm:flex-row items-center justify-between py-4 gap-4">
+      {!isCreateOpen && !editId &&
+        (<div className="space-y-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between py-4 gap-4">
         <Input
           placeholder="Filter by title..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -335,6 +337,8 @@ export default function GearListPage() {
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
+        </div>)
+      }
 
       <GearViewModal
         isOpen={!!viewingGear}

@@ -37,6 +37,9 @@ const formSchema = z.object({
   countryCode: z.string().min(1, "Country code is required"),
   phoneNumber: z.string().optional(),
   description: z.string().min(1, "Description is required"),
+  age: z.string().optional(),
+  yearsOfExperience: z.string().optional(),
+  specialization: z.string().optional(),
   facebook: z.string().url().optional().or(z.literal("")),
   twitter: z.string().url().optional().or(z.literal("")),
   linkedin: z.string().url().optional().or(z.literal("")),
@@ -87,6 +90,9 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
       countryCode: member?.countryCode || "+1",
       phoneNumber: member?.phoneNumber || "",
       description: member?.description || "",
+      age: member?.age || "",
+      yearsOfExperience: member?.yearsOfExperience || "",
+      specialization: member?.specialization || "",
       facebook: member?.facebook || "",
       twitter: member?.twitter || "",
       linkedin: member?.linkedin || "",
@@ -104,6 +110,9 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
         countryCode: member.countryCode || "+1",
         phoneNumber: member.phoneNumber || "",
         description: member.description || "",
+        age: member.age || "",
+        yearsOfExperience: member.yearsOfExperience || "",
+        specialization: member.specialization || "",
         facebook: member.facebook || "",
         twitter: member.twitter || "",
         linkedin: member.linkedin || "",
@@ -143,6 +152,10 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
         formData.append("phoneNumber", values.phoneNumber);
       }
       formData.append("description", values.description);
+
+      if (values.age) formData.append("age", values.age);
+      if (values.yearsOfExperience) formData.append("yearsOfExperience", values.yearsOfExperience);
+      if (values.specialization) formData.append("specialization", values.specialization);
 
       if (values.facebook) formData.append("facebook", values.facebook);
       if (values.twitter) formData.append("twitter", values.twitter);
@@ -286,6 +299,50 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
                   <FormLabel>Designation</FormLabel>
                   <FormControl>
                     <Input placeholder="Member designation" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <FormField
+              control={form.control}
+              name="age"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Age</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. 25-45" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="yearsOfExperience"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Years of Experience</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. 5-10 years" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="specialization"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Specialization</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. Mountain Guide" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

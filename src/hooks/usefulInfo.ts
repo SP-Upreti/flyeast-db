@@ -33,7 +33,9 @@ export interface UsefulInfoResponse {
 }
 
 export interface UsefulInfoApiResponse {
-  data: UsefulInfoItem[];
+  data: {
+    data: UsefulInfoItem[];
+  }
   pagination: Pagination;
   status: string;
   message: string;

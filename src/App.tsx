@@ -44,6 +44,7 @@ import ImportantNoticeListPage from "./components/important-notice/ImportantList
 import InsuranceListPage from "./components/insurance/InsuranceListPage";
 import AddonsPage from "./components/addons/AddonsPage";
 import PrivateTripPage from "./pages/private-trip/private-trip";
+import ShortItineraryListPage from "./components/short-itinerary/ShortItineraryListPage";
 /**
  * The main application component, which contains all the routes and layout
  * components for the application.
@@ -77,6 +78,7 @@ function App() {
             <Route path="reviews" element={<ReviewPage />} />
             <Route path="pax/:id" element={<PaxListPage />} />
             <Route path="Itinerary/:id" element={<ItineraryListPage />} />
+            <Route path="short-itinerary/:id" element={<ShortItineraryListPage />} />
             <Route path="inclusion/:id" element={<InclusionListPage />} />
             <Route path="exclusion/:id" element={<ExclusionListPage />} />
             <Route path="attraction/:id" element={<AttractionListPage />} />

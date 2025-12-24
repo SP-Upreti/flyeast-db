@@ -13,24 +13,22 @@ export default function BookingPage() {
   return (
     <main className="">
 
+      {/* <pre>{JSON.stringify(bookingData, null, 2)}</pre> */}
 
-      <div className="flex divide-x border w-fit rounded-[2px] overflow-hidden">
-        <button className={`px-4 py-2 w-[180px] font-semibold cursor-pointer ${showBooking ? "bg-[#E83759] text-white" : "bg-white text-black"}`} onClick={() => setShowBooking(true)}>Group Departure</button>
-        <button className={`px-4 py-2 w-[180px] font-semibold cursor-pointer ${!showBooking ? "bg-[#E83759] text-white" : "bg-white text-black"}`} onClick={() => setShowBooking(false)}>Private Trips</button>
-      </div>
 
-      {showBooking ? (
+
+      {(
         <div className="container mx-auto py-2 mt-4">
 
 
           <Suspense fallback={<TableShimmer />}>
             <BookingItemTable
-              pkgs={(bookingData?.data?.bookings as any) || []}
+              pkgs={(bookingData?.data as any) || []}
               isLoading={bookingLoading}
             />
           </Suspense>
         </div>
-      ) : <PrivateTripPage />}
+      )}
 
     </main>
   );

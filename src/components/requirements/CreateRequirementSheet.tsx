@@ -167,7 +167,7 @@ export default function CreateRequirementSheet({
                   description: value,
                 })
               }
-              className="flex min-h-[60px] w-full rounded-[2px] border px-3 py-2 text-sm shadow-sm"
+              className="flex min-h-[60px] w-full  text-sm shadow-sm"
               placeholder="Enter description"
             />
           </div>
